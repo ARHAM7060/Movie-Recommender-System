@@ -28,16 +28,18 @@ def recommend(movie):
     return recommended_movie_names, recommended_movie_posters
 
 # Step: Download similarity.pkl from Google Drive if not found
-SIMILARITY_PATH = "similarity.pkl"
-GDRIVE_FILE_ID = "1-mORb4tPPAw9ssDrhnMSKDG_P7jF8xmM"  # Replace with your actual file ID
+# Download similarity.pkl from Google Drive if not found
+SIMILARITY_PATH = "/tmp/similarity.pkl"
+GDRIVE_FILE_ID = "1-mORb4tPPAw9ssDrhnMSKDG_P7jF8xmM"
 
 if not os.path.exists(SIMILARITY_PATH):
     st.warning("Downloading similarity file. Please wait...")
     gdown.download(f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}", SIMILARITY_PATH, quiet=False)
 
-# Load the pickle files
+# Load pickle files
 movies = pickle.load(open('movie_list.pkl', 'rb'))
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+similarity = pickle.load(open(SIMILARITY_PATH, 'rb'))
+
 
 # Streamlit UI
 st.header('Movie Recommender System')
