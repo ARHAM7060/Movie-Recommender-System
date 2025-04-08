@@ -2,6 +2,7 @@ import os
 import pickle
 import streamlit as st
 import requests
+import tempfile
 
 # For downloading from Google Drive
 try:
@@ -28,8 +29,8 @@ def recommend(movie):
     return recommended_movie_names, recommended_movie_posters
 
 # Step: Download similarity.pkl from Google Drive if not found
-# Download similarity.pkl from Google Drive if not found
-SIMILARITY_PATH = "/tmp/similarity.pkl"
+# Use tempfile to get a valid temporary path for Windows
+SIMILARITY_PATH = os.path.join(tempfile.gettempdir(), "similarity.pkl")
 GDRIVE_FILE_ID = "1-mORb4tPPAw9ssDrhnMSKDG_P7jF8xmM"
 
 if not os.path.exists(SIMILARITY_PATH):

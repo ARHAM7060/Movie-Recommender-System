@@ -2,3 +2,4 @@ streamlit
 requests
 gdown
 pandas
+numpy
