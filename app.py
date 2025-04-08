@@ -28,21 +28,31 @@ def recommend(movie):
         recommended_movie_posters.append(fetch_poster(movie_id))
     return recommended_movie_names, recommended_movie_posters
 
-# Step: Download similarity.pkl from Google Drive if not found
-# Use tempfile to get a valid temporary path for Windows
-SIMILARITY_PATH = os.path.join(tempfile.gettempdir(), "similarity.pkl")
-GDRIVE_FILE_ID = "1-mORb4tPPAw9ssDrhnMSKDG_P7jF8xmM"
+# === Download files from Google Drive if not found ===
 
+# Set paths
+SIMILARITY_PATH = os.path.join(tempfile.gettempdir(), "similarity.pkl")
+MOVIE_LIST_PATH = os.path.join(tempfile.gettempdir(), "movie_list.pkl")
+
+# Your Google Drive file IDs
+SIMILARITY_FILE_ID = "1-mORb4tPPAw9ssDrhnMSKDG_P7jF8xmM"
+MOVIE_LIST_FILE_ID = "1V4XOkRJ5v6n_5WYD6Wk1PSRdW3wVbeN4"  # <- Replace this with actual ID
+
+# Download similarity.pkl
 if not os.path.exists(SIMILARITY_PATH):
     st.warning("Downloading similarity file. Please wait...")
-    gdown.download(f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}", SIMILARITY_PATH, quiet=False)
+    gdown.download(f"https://drive.google.com/uc?id={SIMILARITY_FILE_ID}", SIMILARITY_PATH, quiet=False)
 
-# Load pickle files
-movies = pickle.load(open('movie_list.pkl', 'rb'))
+# Download movie_list.pkl
+if not os.path.exists(MOVIE_LIST_PATH):
+    st.warning("Downloading movie list file. Please wait...")
+    gdown.download(f"https://drive.google.com/uc?id={MOVIE_LIST_FILE_ID}", MOVIE_LIST_PATH, quiet=False)
+
+# === Load data ===
+movies = pickle.load(open(MOVIE_LIST_PATH, 'rb'))
 similarity = pickle.load(open(SIMILARITY_PATH, 'rb'))
 
-
-# Streamlit UI
+# === Streamlit UI ===
 st.header('Movie Recommender System')
 movie_list = movies['title'].values
 selected_movie = st.selectbox("Type or select a movie from the dropdown", movie_list)
